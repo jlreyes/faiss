@@ -6,6 +6,13 @@
 
 cmake_minimum_required(VERSION 3.23.1 FATAL_ERROR)
 
+# Set the OpenMP flags directly
+set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
+set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
+set(OpenMP_C_LIB_NAMES "omp")
+set(OpenMP_CXX_LIB_NAMES "omp")
+set(OpenMP_omp_LIBRARY "/opt/homebrew/opt/libomp/lib/libomp.dylib")
+
 project(faiss
   VERSION 1.7.3
   DESCRIPTION "A library for efficient similarity search and clustering of dense vectors."
@@ -19,7 +26,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # Valid values are "generic", "avx2".
 option(FAISS_OPT_LEVEL "" "generic")
-option(FAISS_ENABLE_GPU "Enable support for GPU indexes." ON)
+option(FAISS_ENABLE_GPU "Enable support for GPU indexes." OFF)
 option(FAISS_ENABLE_PYTHON "Build Python extension." ON)
 option(FAISS_ENABLE_C_API "Build C API." OFF)
 
