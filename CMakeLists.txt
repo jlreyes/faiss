@@ -12,6 +12,25 @@ if (APPLE)
   set(OpenMP_omp_LIBRARY "/opt/homebrew/opt/libomp/lib/libomp.dylib")
 endif()
 
+if(UNIX AND NOT APPLE)
+  execute_process(COMMAND find /usr -iname "omp.h" -exec dirname {} \; 2>/dev/null
+                  COMMAND head -n 1
+                  OUTPUT_VARIABLE OPENMP_INCLUDE_PATH
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND find /usr -iname "libomp.so*" -exec dirname {} \; 2>/dev/null
+                  COMMAND head -n 1
+                  OUTPUT_VARIABLE OPENMP_LIB_PATH
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I${OPENMP_INCLUDE_PATH}")
+  set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I${OPENMP_INCLUDE_PATH}")
+  set(OpenMP_CXX_LIB_NAMES "omp")
+  set(OpenMP_omp_LIBRARY "${OPENMP_LIB_PATH}/libomp.so")
+endif()
+
+message(STATUS "OpenMP_CXX_FLAGS: ${OpenMP_CXX_FLAGS}")
+message(STATUS "OpenMP_omp_LIBRARY: ${OpenMP_omp_LIBRARY}")
+
 set(OpenMP_CXX_LIB_NAMES "omp")
 
 project(faiss
