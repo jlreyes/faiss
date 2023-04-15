@@ -7,11 +7,12 @@
 cmake_minimum_required(VERSION 3.23.1 FATAL_ERROR)
 
 # Set the OpenMP flags directly
-set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
-set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
-set(OpenMP_C_LIB_NAMES "omp")
+if (APPLE)
+  set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp -I/opt/homebrew/opt/libomp/include")
+  set(OpenMP_omp_LIBRARY "/opt/homebrew/opt/libomp/lib/libomp.dylib")
+endif()
+
 set(OpenMP_CXX_LIB_NAMES "omp")
-set(OpenMP_omp_LIBRARY "/opt/homebrew/opt/libomp/lib/libomp.dylib")
 
 project(faiss
   VERSION 1.7.3
